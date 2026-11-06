@@ -40,8 +40,8 @@ var c=document.getElementById('c'),x=c.getContext('2d'),W=1280,H=720,SC=6,D=24,K
 var names=['문제 발견','원인 분석','해결 방안','실천과 결과'];
 var narr=['골목 양쪽에 차들이 불법으로 서 있어요. 구급차도 지나가지 못하고 아이들은 위험해요.',
 '왜 생겼을까요? 주차 공간이 부족하고, 차가 늘었고, 단속과 인식도 부족했어요.',
-'주민과 구청이 모여 공영주차장을 만들고 올바른 주차 캠페인을 열어요.',
-'골목이 다시 안전해졌어요. 지역 문제는 함께할 때 해결돼요!'];
+'주민과 구청이 모여, 저녁 시간에 공공기관 주차장을 무료로 개방하기로 해요.',
+'저녁이 되자 차들이 공공기관 주차장으로 옮겨 갔어요. 골목이 안전해졌어요!'];
 var wrap=document.getElementById('wrap'),chips=document.getElementById('chips'),cap=document.getElementById('cap'),fill=document.getElementById('fill'),pb=document.getElementById('pb'),fsb=document.getElementById('fs');
 var t=0,last=null,play=true;
 var chipEls=names.map(function(s,i){var b=document.createElement('button');b.className='chip';b.textContent=(i+1)+'. '+s;b.onclick=function(){go(i)};chips.appendChild(b);return b});
@@ -93,15 +93,15 @@ function bg(t,bad){
  var rg=x.createLinearGradient(0,591,0,H);rg.addColorStop(0,'#868c95');rg.addColorStop(1,'#6a7079');x.fillStyle=rg;x.fillRect(0,591,W,129);
  x.fillStyle='rgba(255,255,255,.7)';for(var d=0;d<W;d+=120)x.fillRect(d,662,64,6)}
 var SL=[[1015,548],[1105,548],[1195,548]];
-function lot(t){var a=ease((t-13.6)/1);if(a<=0)return;x.save();x.translate(0,560);x.scale(1,a);x.translate(0,-560);
+function lot(t){x.save();
  x.fillStyle='#d3d9e0';x.fillRect(930,330,350,230);x.fillStyle='#8a97a6';x.fillRect(930,330,350,14);
- rr(1015,258,170,58,10,'#1f6fb2');txt('P 공영주차장',1100,297,26,'#fff');
+ rr(975,250,260,58,10,'#1f6fb2');txt('P 공공기관 주차장',1105,289,26,'#fff');var op=t>=14;rr(1000,312,210,34,17,op?'#ffd23f':'#e8a0a0');txt(op?'저녁 6시~ 무료 개방':'저녁엔 닫혀 있어요',1105,336,19,'#1d2b3a');x.save();x.translate(940,505);x.rotate(-ease((t-14)/.8)*1.25);rr(0,-4,100,8,3,'#d6202a');x.restore();x.fillStyle='#555';x.fillRect(930,490,12,70);
  x.strokeStyle='#fff';x.lineWidth=4;x.beginPath();for(var k=0;k<4;k++){x.moveTo(970+k*90,450);x.lineTo(970+k*90,556)}x.stroke();x.restore()}
 var CARS=[[330,612,'#e05a4f',.5,14.6,0],[700,612,'#3f8f6a',1.2,15.2,1],[1040,612,'#e0b020',1.9,15.8,2],[520,700,'#6a5ab0',2.6,15.6,-1],[880,700,'#3b8fd0',3.3,15.0,-1]];
 function scene(t){
  var sec=Math.min(3,Math.floor(t/SC)),lt=t-sec*SC,bad=t<12.5?1:1-ease((t-12.5)/4);
  x.save();var z=1+.035*(lt/SC);x.translate(W/2,H/2);x.scale(z,z);x.translate(-W/2,-H/2);
- bg(t,bad);lot(t);
+ bg(t,bad);lot(t);var dk=ease((t-14.5)/4);if(dk>0){x.fillStyle='rgba(255,130,50,'+.24*dk+')';x.fillRect(0,0,W,H)}
  CARS.forEach(function(k){var a=ease((t-k[3])/.8);if(a<=0)return;var px=k[0]+(1-a)*(k[0]<640?-700:700),py=k[1],s=1,go=ease((t-k[4])/1.6);
   if(go>0){if(k[5]>=0){px=lerp(k[0],SL[k[5]][0],go);py=lerp(k[1],548,go);s=lerp(1,.45,go)}else{px=k[0]+go*900;if(go>=1)return}}
   car(px,py,k[2],s,0,t,px*.06);
@@ -109,7 +109,7 @@ function scene(t){
  var ax=150+ease((t-17.4)/5)*1500;car(ax,700,0,1,1,t,ax*.06);
  if(sec===0&&t>3)bubble(190,520,'삐뽀삐뽀! 못 지나가요',330,ease((t-3)/.4));
  if(t>=17&&true){var ba=ease((t-17)/.9),sw=Math.sin(t*1.5)*3;x.fillStyle='#6b5a4a';x.fillRect(325,240,10,320);x.fillRect(885,240,10,320);
-  x.save();x.translate(0,(ba-1)*200);rr(335,250+sw,550,76,14,'#ffd23f');txt('정해진 곳에 주차해요!',610,300+sw,38,'#1d2b3a');x.restore()}
+  x.save();x.translate(0,(ba-1)*200);rr(335,250+sw,550,76,14,'#ffd23f');txt('저녁엔 무료 주차장을 이용해요!',610,300+sw,34,'#1d2b3a');x.restore()}
  if(t>=12.2){x.globalAlpha=ease((t-12.2)/.6);[[420,'#3b6fb6','#2b1d18'],[490,'#c0564f','#5a3a22'],[580,'#6a4fb0','#222'],[650,'#2b4a7a','#1f3f8a']].forEach(function(p,i){person(p[0],590,p[1],1,null,t>=18?Math.sin(t*6+i)*.5+1:0,1,p[2])});x.globalAlpha=1}
  if(sec===0){var kx=1250-ease((t-1.2)/3.2)*170;person(kx,592,'#f0a030',.8,t<4.4?t*9:null,0,-1,'#222');if(t>4.6)bubble(1090,478,'위험해요!',190,ease((t-4.6)/.4))}
  if(sec===1){x.fillStyle='rgba(15,25,40,.62)';x.fillRect(0,0,W,H);
@@ -118,7 +118,7 @@ function scene(t){
    if(i===1){txt('차가 점점 늘었어요',0,-118,26,'#1d2b3a');var gr=ease(u/1.2);rr(-100,40-40,70,40,6,'#8fb8d9');rr(30,60-(40+90*gr),70,40+90*gr,6,'#e05a4f');txt('예전',-65,86,22,'#1d2b3a',700);txt('지금',65,86,22,'#1d2b3a',700);x.font='30px sans-serif';x.fillText('🚗',65,60-(40+90*gr)-8);txt('집집마다 차가 있어요',0,130,22,'#55657a',400)}
    if(i===2){txt('단속과 인식이 부족해요',0,-118,25,'#1d2b3a');x.font='76px sans-serif';x.fillText('👀',0,-10);rr(-130,20,260,52,26,'#eef2f6');txt('잠깐인데 뭐 어때?',0,55,24,'#1d2b3a',700);txt('단속하기도 어려워요',0,130,22,'#55657a',400)}
    x.restore()}}
- if(sec===2&&t>12.6&&t<14.6)bubble(490,450,'공영주차장을 만들어요!',360,ease((t-12.6)/.4)*(1-ease((t-14.2)/.4)));
+ if(sec===2&&t>12.6&&t<14.6)bubble(490,450,'공공기관 주차장을 개방해요!',390,ease((t-12.6)/.4)*(1-ease((t-14.2)/.4)));
  if(sec===3){var kx2=80+ease((t-18)/5.5)*1100;person(kx2,592,'#f0a030',.8,t*9,0,1,'#222');
   if(t>20)for(var j=0;j<40;j++){var cy=((t-20)*90+j*47)%520-20,cx=(j*97)%W;x.save();x.translate(cx,cy);x.rotate(t*3+j);x.fillStyle=['#ff7aa8','#ffd23f','#5aaef0','#7ad07a'][j%4];x.fillRect(-4,-2,8,4);x.restore()}
   var fl=ease((t-18.5)/3);for(var f=0;f<24;f++){var fx=30+f*53;x.strokeStyle='#4c9a4a';x.lineWidth=3;x.beginPath();x.moveTo(fx,586);x.lineTo(fx,586-20*fl);x.stroke();x.fillStyle=['#ff7aa8','#ffd23f','#ff9a4a'][f%3];x.beginPath();x.arc(fx,586-20*fl,7*fl,0,7);x.fill()}
@@ -126,6 +126,7 @@ function scene(t){
  if(t>1&&t<22.4){x.fillStyle=Math.floor(t*6)%2?'rgba(255,60,60,.07)':'rgba(60,110,255,.07)';x.fillRect(0,0,W,H)}
  x.restore();
  var a2=ease(lt/.4)*(1-ease((lt-1.8)/.5));if(a2>0){var dy=(1-ease(lt/.4))*-20;x.save();x.globalAlpha=a2;rr(W/2-210,16+dy,420,64,32,'rgba(15,25,40,.84)');txt((sec+1)+'  '+names[sec],W/2,60+dy,36,'#fff');x.restore()}
+ var ba2=ease((t-13.8)/.5);if(ba2>0){x.save();x.globalAlpha=ba2;rr(24,20,168,44,22,'rgba(15,25,40,.84)');txt('🕕 저녁 6시',108,51,22,'#fff');x.restore()}
  x.fillStyle=VG;x.fillRect(0,0,W,H)}
 x.setTransform(K,0,0,K,0,0);
 var VG=x.createRadialGradient(W/2,H/2,H*.5,W/2,H/2,H*1.0);VG.addColorStop(0,'rgba(0,0,0,0)');VG.addColorStop(1,'rgba(0,0,0,.3)');
